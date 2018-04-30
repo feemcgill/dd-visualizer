@@ -91,6 +91,8 @@ function play(audioBuffer) {
   autioInitiated = true;
   if (playCount > 0) {
     swapTextures();
+  } else {
+    snakeIntro();    
   }
   playCount++;
 }

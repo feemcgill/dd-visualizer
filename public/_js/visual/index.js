@@ -29,6 +29,17 @@ function nowPLayingTicker(){
     }} )
 }
 
+function snakeIntro(){
+    for (let i = 0; i < snakeSegs.length; i++) {
+        TweenMax.to(snakeSegs[i], 10, {width: app.renderer.width * ((i + 1) / snakeSegs.length), height: app.renderer.height * ((i + 1) / snakeSegs.length), delay: i * 0.7, 
+            onComplete: function(){
+                if (i+1 == snakeSegs.length) {
+                    snakesReady = true;
+                }
+            }
+        })
+    }
+}
 
 
 function swapTextures() {
@@ -157,22 +168,6 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
    
      snakeSegsReverse = snakeSegs.reverse();
-
-    function snakeIntro(){
-        for (let i = 0; i < snakeSegs.length; i++) {
-            TweenMax.to(snakeSegs[i], 10, {width: app.renderer.width * ((i + 1) / snakeLength), height: app.renderer.height * ((i + 1) / snakeLength), delay: i * 0.7, 
-                onComplete: function(){
-                    if (i+1 == snakeSegs.length) {
-                        snakesReady = true;
-                    }
-                }
-            })
-        }
-    }
-
-    setTimeout(() => {
-        snakeIntro();
-    }, 6000);
 
 
     const logo = new PIXI.Sprite(resources.fun.texture);

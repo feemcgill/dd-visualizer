@@ -29,10 +29,26 @@ function nowPLayingTicker() {
         } });
 }
 
+function snakeIntro() {
+    var _loop = function _loop(i) {
+        TweenMax.to(snakeSegs[i], 10, { width: app.renderer.width * ((i + 1) / snakeSegs.length), height: app.renderer.height * ((i + 1) / snakeSegs.length), delay: i * 0.7,
+            onComplete: function onComplete() {
+                if (i + 1 == snakeSegs.length) {
+                    snakesReady = true;
+                }
+            }
+        });
+    };
+
+    for (var i = 0; i < snakeSegs.length; i++) {
+        _loop(i);
+    }
+}
+
 function swapTextures() {
     videoSprite.setTexture(videoSprite.texture == vidTex ? vidTex2 : vidTex);
 
-    var _loop = function _loop(i) {
+    var _loop2 = function _loop2(i) {
         setTimeout(function () {
             snakeSegs[i].setTexture(snakeSegs[i].texture == vidTex ? vidTex2 : vidTex);
             if (i + 1 == snakeSegs.length) {
@@ -44,7 +60,7 @@ function swapTextures() {
     };
 
     for (var i = 0; i < snakeSegs.length; i++) {
-        _loop(i);
+        _loop2(i);
     }
 };
 
@@ -153,26 +169,6 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 
     snakeSegsReverse = snakeSegs.reverse();
 
-    function snakeIntro() {
-        var _loop2 = function _loop2(_i) {
-            TweenMax.to(snakeSegs[_i], 10, { width: app.renderer.width * ((_i + 1) / snakeLength), height: app.renderer.height * ((_i + 1) / snakeLength), delay: _i * 0.7,
-                onComplete: function onComplete() {
-                    if (_i + 1 == snakeSegs.length) {
-                        snakesReady = true;
-                    }
-                }
-            });
-        };
-
-        for (var _i = 0; _i < snakeSegs.length; _i++) {
-            _loop2(_i);
-        }
-    }
-
-    setTimeout(function () {
-        snakeIntro();
-    }, 6000);
-
     var logo = new PIXI.Sprite(resources.fun.texture);
     logo.x = app.renderer.width / 2;
     logo.y = app.renderer.height / 2;
@@ -200,7 +196,7 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
     analJamCont.x = 100;
     analJamCont.y = 100;
     var analShapes = [];
-    for (var _i2 = 0; _i2 < 4; _i2++) {
+    for (var _i = 0; _i < 4; _i++) {
         for (var j = 0; j < 4; j++) {
             var _fun = new PIXI.Sprite();
             _fun.width = 40;
@@ -210,9 +206,9 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
             _funmask.drawCircle(0, 0, 1);
             _funmask.endFill();
             // Setup the position of the fun
-            _fun.x = 100 * _i2;
+            _fun.x = 100 * _i;
             _fun.y = 100 * j;
-            _fun.x = ww * _i2 / 4;
+            _fun.x = ww * _i / 4;
             _fun.y = wh * j / 4;
             _fun.alpha = 0.7;
             analShapes.push(_fun);
@@ -238,10 +234,10 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
             analyser.getByteFrequencyData(dataArray);
             logo.scale.x = r;
             logo.scale.y = r;
-            for (var _i3 = 0; _i3 < analShapes.length; _i3++) {
-                var e = analShapes[_i3];
-                e.scale.x = dataArray[_i3];
-                e.scale.y = dataArray[_i3];
+            for (var _i2 = 0; _i2 < analShapes.length; _i2++) {
+                var e = analShapes[_i2];
+                e.scale.x = dataArray[_i2];
+                e.scale.y = dataArray[_i2];
             }
         }
     });
@@ -328,6 +324,8 @@ function play(audioBuffer) {
   autioInitiated = true;
   if (playCount > 0) {
     swapTextures();
+  } else {
+    snakeIntro();
   }
   playCount++;
 }
