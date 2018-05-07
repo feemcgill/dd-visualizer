@@ -1,6 +1,6 @@
 
 
-const debug = false;
+const debug = true;
 
 const ddTracks = [
   {
@@ -108,16 +108,21 @@ function nextTrack(){
     window.fetch(audioSrc)
     .then(response => response.arrayBuffer())
     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer, 
-    audioBuffer => {
-      trackBuffer = audioBuffer;
-    }, 
-    error => 
-      console.error(error)
-    ));
-    setTimeout(() => {
-      dbg.append('<div>got the track should play</div>');
+      audioBuffer => {
+        trackBuffer = audioBuffer;
+      }, 
+      error => 
+        console.error(error)
+      )
+    )
+    .catch((exception) => {
+      console.error('oh noes!', exception)
+      dbg.append('<div>EXCEPTION</div>');
+      dbg.append(exception);
+    })    
+    .then(function(){
       play(trackBuffer);      
-    }, 1000);  
+    });
 }
   
 

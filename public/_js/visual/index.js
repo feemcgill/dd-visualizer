@@ -71,13 +71,13 @@ document.body.appendChild(app.view);
 PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
 
-    vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
-    //vidTex = new PIXI.Texture.fromImage('img/rg.jpg');    
+    //vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    vidTex = new PIXI.Texture.fromImage('img/rg.jpg');    
     vidTex.baseTexture.source.loop = true;
     vidTex.baseTexture.source.muted = true;
 
-    vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
-    //vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
+    //vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
     vidTex2.baseTexture.source.loop = true;
     vidTex2.baseTexture.source.muted = true;
 

@@ -77,13 +77,13 @@ document.body.appendChild(app.view);
 // load the texture we need
 PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 
-    vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
-    //vidTex = new PIXI.Texture.fromImage('img/rg.jpg');    
+    //vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    vidTex = new PIXI.Texture.fromImage('img/rg.jpg');
     vidTex.baseTexture.source.loop = true;
     vidTex.baseTexture.source.muted = true;
 
-    vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
-    //vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
+    //vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
     vidTex2.baseTexture.source.loop = true;
     vidTex2.baseTexture.source.muted = true;
 
@@ -250,7 +250,7 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 // mySprite.mask = spriteMask;
 'use strict';
 
-var debug = false;
+var debug = true;
 
 var ddTracks = [{
   'url': 'White-Fence_To-the-Boy-I-Jumped-in-the-Hemlock-Alley.mp3',
@@ -346,11 +346,13 @@ function nextTrack() {
     }, function (error) {
       return console.error(error);
     });
-  });
-  setTimeout(function () {
-    dbg.append('<div>got the track should play</div>');
+  }).catch(function (exception) {
+    console.error('oh noes!', exception);
+    dbg.append('<div>EXCEPTION</div>');
+    dbg.append(exception);
+  }).then(function () {
     play(trackBuffer);
-  }, 1000);
+  });
 }
 
 function play(audioBuffer) {
