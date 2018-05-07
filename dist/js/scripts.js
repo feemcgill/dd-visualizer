@@ -32,7 +32,7 @@ $(document).ready(function () {
   }
 });
 
-var tracks = ddTracks;
+var tracks = testTracks;
 
 var trackIndex = 0;
 var audioKicking = false;
