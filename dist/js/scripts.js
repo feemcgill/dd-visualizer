@@ -101,7 +101,8 @@ function nextTrack() {
     dbg.append('<div>EXCEPTION</div>');
     dbg.append(exception);
   }).then(function () {
-    play(trackBuffer);
+    //play(trackBuffer);
+    dbg.append('<div>Try playing now</div>');
   });
 }
 
@@ -173,7 +174,9 @@ var muted = false;
 $('.play-it').click(function () {
   initAudio();
 });
-
+$('.play-now').click(function () {
+  play(trackBuffer);
+});
 $('.mute-toggle').click(function () {
   if (muted) {
     trackSource.connect(analyser);
