@@ -31,14 +31,14 @@ const testTracks = [
   }
 ]
 
-const tracks = ddTracks;
+const tracks = testTracks;
 
 let trackIndex = 0;
 let audioKicking = false;
 let autioInitiated = false;
 let playCount = 0;
 
-alert('ios 2');
+alert('ios 3');
 var audioContext = null, usingWebAudio = true;
 
 try {
@@ -53,7 +53,7 @@ try {
     usingWebAudio = false;
 }
 
-
+alert(usingWebAudio);
 
 
 //const audioContext = new AudioContext();
@@ -75,6 +75,7 @@ let trackBuffer;
 let trackSource;
 
 function nextTrack(){
+  alert('init Next Track');
   audioKicking = false;
   trackIndex = (trackIndex + 1) % tracks.length;
   const audioSrc = './audio/'+tracks[trackIndex].url;
