@@ -275,7 +275,40 @@ var trackIndex = 0;
 var audioKicking = false;
 var autioInitiated = false;
 var playCount = 0;
-var audioContext = new AudioContext();
+
+alert('ios 1');
+var audioContext = null,
+    usingWebAudio = true;
+
+try {
+  if (typeof AudioContext !== 'undefined') {
+    audioContext = new AudioContext();
+  } else if (typeof webkitAudioContext !== 'undefined') {
+    audioContext = new webkitAudioContext();
+  } else {
+    usingWebAudio = false;
+  }
+} catch (e) {
+  usingWebAudio = false;
+}
+
+// context state at this time is `undefined` in iOS8 Safari
+if (usingWebAudio && audioContext.state === 'suspended') {
+  var resume = function resume() {
+    audioContext.resume();
+
+    setTimeout(function () {
+      if (audioContext.state === 'running') {
+        document.body.removeEventListener('touchend', resume, false);
+      }
+    }, 0);
+  };
+
+  document.body.addEventListener('touchend', resume, false);
+}
+
+//const audioContext = new AudioContext();
+
 
 var analyser = audioContext.createAnalyser();
 analyser.connect(audioContext.destination);
