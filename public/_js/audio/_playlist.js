@@ -85,18 +85,22 @@ function nextTrack(){
 
   window.fetch(audioSrc)
     .then(response => {
-      response.arrayBuffer();
+      //response.arrayBuffer();
       console.log(response);
       dbg.text(response.status);
+      return response.arrayBuffer();
     })
-    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+    .then(arrayBuffer => {
+      dbg.append('<div>decode audio data</div>');
+      return audioContext.decodeAudioData(arrayBuffer);
+    })
     .then(audioBuffer => {
       trackBuffer = audioBuffer;
       setTimeout(() => {
         tickerText.text =  'NOW PLAYING: ' + tracks[trackIndex].text;
         nowPLayingTicker();
       }, 3500);
-      dbg.text('got the track should play');
+      dbg.append('<div>got the track should play</div>');
       play(trackBuffer);
     });
 }
@@ -115,7 +119,7 @@ function play(audioBuffer) {
     nextTrack();
   }    
   trackSource.start();
-  dbg.text('should start now');
+  dbg.append('should start now');
   audioKicking = true;
   autioInitiated = true;
   if (playCount > 0) {
