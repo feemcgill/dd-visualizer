@@ -34,7 +34,7 @@ const testTracks = [
 let dbg = null;
 $(document).ready(function(){
   dbg = $('.debug');
-  dbg.text('ios6')
+  dbg.text('ios7')
 });
 
 const tracks = testTracks;
@@ -46,28 +46,17 @@ let playCount = 0;
 
 var audioContext = null, usingWebAudio = true;
 
-try {
-  if (typeof AudioContext !== 'undefined') {
-      audioContext = new AudioContext();
-  } else if (typeof webkitAudioContext !== 'undefined') {
-      audioContext = new webkitAudioContext();
-  } else {
-      usingWebAudio = false;
-  }
-} catch(e) {
-    usingWebAudio = false;
-}
+
 
 
 
 //const audioContext = new AudioContext();
 
 
-const analyser = audioContext.createAnalyser();
-analyser.connect(audioContext.destination);
-analyser.fftSize = 32;
-let bufferLength = analyser.frequencyBinCount; 
-let dataArray = new Uint8Array(bufferLength);
+let analyser = null;
+let bufferLength = null;
+let dataArray = null;
+
 
 
 
@@ -130,30 +119,59 @@ function play(audioBuffer) {
   playCount++;
 }
 
-nextTrack();
 
 
+function initAudio(){
+  console.log('init audio');
+  try {
+    if (typeof AudioContext !== 'undefined') {
+        audioContext = new AudioContext();
+    } else if (typeof webkitAudioContext !== 'undefined') {
+        audioContext = new webkitAudioContext();
+    } else {
+        usingWebAudio = false;
+    }
+  } catch(e) {
+      usingWebAudio = false;
+  }
 
+  analyser = audioContext.createAnalyser();
+  analyser.connect(audioContext.destination);
+  analyser.fftSize = 32;
+  bufferLength = analyser.frequencyBinCount; 
+  dataArray = new Uint8Array(bufferLength);
 
-// context state at this time is `undefined` in iOS8 Safari
-if (usingWebAudio && audioContext.state === 'suspended') {
-  var resume = function () {
-    audioContext.resume();
+  // context state at this time is `undefined` in iOS8 Safari
+  if (usingWebAudio && audioContext.state === 'suspended') {
+    var resume = function () {
+      audioContext.resume();
 
-    setTimeout(function () {
-      if (audioContext.state === 'running') {
-        document.body.removeEventListener('touchend', resume, false);
-      }
-    }, 0);
-  };
+      setTimeout(function () {
+        if (audioContext.state === 'running') {
+          document.body.removeEventListener('touchend', resume, false);
+        }
+      }, 0);
+    };
 
-  document.body.addEventListener('touchend', resume, false);
+    document.body.addEventListener('touchend', resume, false);
+  }
+    
+  nextTrack();
 }
+
+
+``
+
+
 
 
 
 
 let muted = false;
+$('.play-it').click(function(){
+  initAudio();
+});
+
 $('.mute-toggle').click(function(){
   if (muted) {
     trackSource.connect(analyser);
