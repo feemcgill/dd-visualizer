@@ -35,13 +35,13 @@ const testTracks = [
 let dbg = null;
 $(document).ready(function(){
   dbg = $('.debug');
-  dbg.text('ios8');
+  dbg.text('ios9');
   if (debug) {
     dbg.show();
   }
 });
 
-const tracks = ddTracks;
+const tracks = testTracks;
 
 let trackIndex = 0;
 let audioKicking = false;
@@ -94,7 +94,7 @@ function nextTrack(){
   .then(function(){
     //play(trackBuffer);
     if (audioKicking) {
-      play(trackBuffer);
+      //play(trackBuffer);
     } else {
       dbg.append('<div>Try playing now</div>');
       audioKicking = true;
@@ -114,7 +114,8 @@ function play(audioBuffer) {
   trackSource.connect(analyser);
 
   trackSource.onended = function(event) {
-    nextTrack();
+    play(trackBuffer);
+    // play here
   }    
   trackSource.start();
   dbg.append('should start now');
@@ -125,6 +126,7 @@ function play(audioBuffer) {
     snakeIntro();    
   }
   playCount++;
+  nextTrack();
 }
 
 
