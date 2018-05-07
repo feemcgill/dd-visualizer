@@ -84,7 +84,11 @@ function nextTrack(){
   const audioSrc = './audio/'+tracks[trackIndex].url;
 
   window.fetch(audioSrc)
-    .then(response => response.arrayBuffer())
+    .then(response => {
+      response.arrayBuffer();
+      console.log(response);
+      dbg.text(response.status);
+    })
     .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
     .then(audioBuffer => {
       trackBuffer = audioBuffer;

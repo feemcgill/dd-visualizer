@@ -69,7 +69,9 @@ function nextTrack() {
   var audioSrc = './audio/' + tracks[trackIndex].url;
 
   window.fetch(audioSrc).then(function (response) {
-    return response.arrayBuffer();
+    response.arrayBuffer();
+    console.log(response);
+    dbg.text(response.status);
   }).then(function (arrayBuffer) {
     return audioContext.decodeAudioData(arrayBuffer);
   }).then(function (audioBuffer) {
