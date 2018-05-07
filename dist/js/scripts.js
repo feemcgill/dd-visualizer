@@ -24,7 +24,7 @@ var testTracks = [{
 var dbg = null;
 $(document).ready(function () {
   dbg = $('.debug');
-  dbg.text('ios7');
+  dbg.text('ios8');
 });
 
 var tracks = testTracks;
