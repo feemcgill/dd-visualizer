@@ -306,8 +306,8 @@ var trackSource = void 0;
 
 function nextTrack() {
   audioKicking = false;
-  trackIndex = (trackIndex + 1) % tracks.length;
   var audioSrc = './audio/' + tracks[trackIndex].url;
+  trackIndex = (trackIndex + 1) % tracks.length;
 
   // window.fetch(audioSrc)
   //   .then(response => {
