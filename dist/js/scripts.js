@@ -276,7 +276,7 @@ var audioKicking = false;
 var autioInitiated = false;
 var playCount = 0;
 
-alert('ios 1');
+alert('ios 2');
 var audioContext = null,
     usingWebAudio = true;
 
@@ -290,21 +290,6 @@ try {
   }
 } catch (e) {
   usingWebAudio = false;
-}
-
-// context state at this time is `undefined` in iOS8 Safari
-if (usingWebAudio && audioContext.state === 'suspended') {
-  var resume = function resume() {
-    audioContext.resume();
-
-    setTimeout(function () {
-      if (audioContext.state === 'running') {
-        document.body.removeEventListener('touchend', resume, false);
-      }
-    }, 0);
-  };
-
-  document.body.addEventListener('touchend', resume, false);
 }
 
 //const audioContext = new AudioContext();
@@ -336,6 +321,7 @@ function nextTrack() {
       tickerText.text = 'NOW PLAYING: ' + tracks[trackIndex].text;
       nowPLayingTicker();
     }, 3500);
+    alert('got the track should play');
     play(trackBuffer);
   });
 }
@@ -353,6 +339,7 @@ function play(audioBuffer) {
     nextTrack();
   };
   trackSource.start();
+  alert('should start now');
   audioKicking = true;
   autioInitiated = true;
   if (playCount > 0) {
@@ -364,6 +351,21 @@ function play(audioBuffer) {
 }
 
 nextTrack();
+
+// context state at this time is `undefined` in iOS8 Safari
+if (usingWebAudio && audioContext.state === 'suspended') {
+  var resume = function resume() {
+    audioContext.resume();
+
+    setTimeout(function () {
+      if (audioContext.state === 'running') {
+        document.body.removeEventListener('touchend', resume, false);
+      }
+    }, 0);
+  };
+
+  document.body.addEventListener('touchend', resume, false);
+}
 
 var muted = false;
 $('.mute-toggle').click(function () {
