@@ -1,141 +1,5 @@
 'use strict';
 
-var ddTracks = [{
-  'url': 'White-Fence_To-the-Boy-I-Jumped-in-the-Hemlock-Alley.mp3',
-  'text': 'To the Boy I Jumped in the Hemlock Alley by White Fence'
-}, {
-  'url': 'Tame-Impala_Yes-Im-Changing.mp3',
-  'text': 'Yes I\'m Changing by Tame Impala'
-
-}, {
-  'url': 'Mercury-Rev_Opus-40.mp3',
-  'text': 'Opus 40 by Mercury Rev'
-
-}];
-
-var testTracks = [{
-  'url': '1.mp3'
-}, {
-  'url': '2.mp3'
-}, {
-  'url': '3.mp3'
-}];
-
-var tracks = testTracks;
-
-var trackIndex = 0;
-var audioKicking = false;
-var autioInitiated = false;
-var playCount = 0;
-
-alert('ios 5');
-var audioContext = null,
-    usingWebAudio = true;
-
-try {
-  if (typeof AudioContext !== 'undefined') {
-    audioContext = new AudioContext();
-  } else if (typeof webkitAudioContext !== 'undefined') {
-    audioContext = new webkitAudioContext();
-  } else {
-    usingWebAudio = false;
-  }
-} catch (e) {
-  usingWebAudio = false;
-}
-
-alert(usingWebAudio);
-
-//const audioContext = new AudioContext();
-
-
-var analyser = audioContext.createAnalyser();
-analyser.connect(audioContext.destination);
-analyser.fftSize = 32;
-var bufferLength = analyser.frequencyBinCount;
-var dataArray = new Uint8Array(bufferLength);
-
-var viZdata = void 0;
-
-var trackBuffer = void 0;
-var trackSource = void 0;
-
-function nextTrack() {
-  alert('init Next Track');
-  audioKicking = false;
-  trackIndex = (trackIndex + 1) % tracks.length;
-  var audioSrc = './audio/' + tracks[trackIndex].url;
-
-  window.fetch(audioSrc).then(function (response) {
-    return response.arrayBuffer();
-  }).then(function (arrayBuffer) {
-    return audioContext.decodeAudioData(arrayBuffer);
-  }).then(function (audioBuffer) {
-    trackBuffer = audioBuffer;
-    setTimeout(function () {
-      tickerText.text = 'NOW PLAYING: ' + tracks[trackIndex].text;
-      nowPLayingTicker();
-    }, 3500);
-    alert('got the track should play');
-    play(trackBuffer);
-  });
-}
-
-function play(audioBuffer) {
-  if (autioInitiated) {
-    trackSource.buffer = null;
-  }
-  trackSource = audioContext.createBufferSource();
-  trackSource.buffer = audioBuffer;
-  //trackSource.connect(audioContext.destination);
-  trackSource.connect(analyser);
-
-  trackSource.onended = function (event) {
-    nextTrack();
-  };
-  trackSource.start();
-  alert('should start now');
-  audioKicking = true;
-  autioInitiated = true;
-  if (playCount > 0) {
-    swapTextures();
-  } else {
-    snakeIntro();
-  }
-  playCount++;
-}
-
-nextTrack();
-
-// context state at this time is `undefined` in iOS8 Safari
-if (usingWebAudio && audioContext.state === 'suspended') {
-  var resume = function resume() {
-    audioContext.resume();
-
-    setTimeout(function () {
-      if (audioContext.state === 'running') {
-        document.body.removeEventListener('touchend', resume, false);
-      }
-    }, 0);
-  };
-
-  document.body.addEventListener('touchend', resume, false);
-}
-
-var muted = false;
-$('.mute-toggle').click(function () {
-  if (muted) {
-    trackSource.connect(analyser);
-    $(this).text('mute');
-  } else {
-    trackSource.disconnect();
-    $(this).text('unmute');
-  }
-  muted = !muted;
-});
-"use strict";
-'use strict';
-
 // The application will create a renderer using WebGL, if possible,
 // with a fallback to a canvas render. It will also setup the ticker
 // and the root stage PIXI.Container
@@ -213,11 +77,13 @@ document.body.appendChild(app.view);
 // load the texture we need
 PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 
-    vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    //vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    vidTex = new PIXI.Texture.fromImage('img/logo.png');
     vidTex.baseTexture.source.loop = true;
     vidTex.baseTexture.source.muted = true;
 
-    vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    //vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    vidTex2 = new PIXI.Texture.fromImage('img/logo.png');
     vidTex2.baseTexture.source.loop = true;
     vidTex2.baseTexture.source.muted = true;
 
@@ -382,3 +248,139 @@ PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 // var texture = PIXI.Texture.fromCanvas(canvas);
 // var spriteMask = new PIXI.Texture(texture);
 // mySprite.mask = spriteMask;
+'use strict';
+
+var ddTracks = [{
+  'url': 'White-Fence_To-the-Boy-I-Jumped-in-the-Hemlock-Alley.mp3',
+  'text': 'To the Boy I Jumped in the Hemlock Alley by White Fence'
+}, {
+  'url': 'Tame-Impala_Yes-Im-Changing.mp3',
+  'text': 'Yes I\'m Changing by Tame Impala'
+
+}, {
+  'url': 'Mercury-Rev_Opus-40.mp3',
+  'text': 'Opus 40 by Mercury Rev'
+
+}];
+
+var testTracks = [{
+  'url': '1.mp3'
+}, {
+  'url': '2.mp3'
+}, {
+  'url': '3.mp3'
+}];
+
+var tracks = testTracks;
+
+var trackIndex = 0;
+var audioKicking = false;
+var autioInitiated = false;
+var playCount = 0;
+
+alert('ios 5');
+var audioContext = null,
+    usingWebAudio = true;
+
+try {
+  if (typeof AudioContext !== 'undefined') {
+    audioContext = new AudioContext();
+  } else if (typeof webkitAudioContext !== 'undefined') {
+    audioContext = new webkitAudioContext();
+  } else {
+    usingWebAudio = false;
+  }
+} catch (e) {
+  usingWebAudio = false;
+}
+
+alert(usingWebAudio);
+
+//const audioContext = new AudioContext();
+
+
+var analyser = audioContext.createAnalyser();
+analyser.connect(audioContext.destination);
+analyser.fftSize = 32;
+var bufferLength = analyser.frequencyBinCount;
+var dataArray = new Uint8Array(bufferLength);
+
+var viZdata = void 0;
+
+var trackBuffer = void 0;
+var trackSource = void 0;
+
+function nextTrack() {
+  alert('init Next Track');
+  audioKicking = false;
+  trackIndex = (trackIndex + 1) % tracks.length;
+  var audioSrc = './audio/' + tracks[trackIndex].url;
+
+  window.fetch(audioSrc).then(function (response) {
+    return response.arrayBuffer();
+  }).then(function (arrayBuffer) {
+    return audioContext.decodeAudioData(arrayBuffer);
+  }).then(function (audioBuffer) {
+    trackBuffer = audioBuffer;
+    setTimeout(function () {
+      tickerText.text = 'NOW PLAYING: ' + tracks[trackIndex].text;
+      nowPLayingTicker();
+    }, 3500);
+    alert('got the track should play');
+    play(trackBuffer);
+  });
+}
+
+function play(audioBuffer) {
+  if (autioInitiated) {
+    trackSource.buffer = null;
+  }
+  trackSource = audioContext.createBufferSource();
+  trackSource.buffer = audioBuffer;
+  //trackSource.connect(audioContext.destination);
+  trackSource.connect(analyser);
+
+  trackSource.onended = function (event) {
+    nextTrack();
+  };
+  trackSource.start();
+  alert('should start now');
+  audioKicking = true;
+  autioInitiated = true;
+  if (playCount > 0) {
+    swapTextures();
+  } else {
+    snakeIntro();
+  }
+  playCount++;
+}
+
+nextTrack();
+
+// context state at this time is `undefined` in iOS8 Safari
+if (usingWebAudio && audioContext.state === 'suspended') {
+  var resume = function resume() {
+    audioContext.resume();
+
+    setTimeout(function () {
+      if (audioContext.state === 'running') {
+        document.body.removeEventListener('touchend', resume, false);
+      }
+    }, 0);
+  };
+
+  document.body.addEventListener('touchend', resume, false);
+}
+
+var muted = false;
+$('.mute-toggle').click(function () {
+  if (muted) {
+    trackSource.connect(analyser);
+    $(this).text('mute');
+  } else {
+    trackSource.disconnect();
+    $(this).text('unmute');
+  }
+  muted = !muted;
+});
+"use strict";
