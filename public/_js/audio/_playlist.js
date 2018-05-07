@@ -38,7 +38,7 @@ let audioKicking = false;
 let autioInitiated = false;
 let playCount = 0;
 
-alert('ios 3');
+alert('ios 5');
 var audioContext = null, usingWebAudio = true;
 
 try {
