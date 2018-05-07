@@ -41,7 +41,7 @@ $(document).ready(function(){
   }
 });
 
-const tracks = testTracks;
+const tracks = ddTracks;
 
 let trackIndex = 0;
 let audioKicking = false;

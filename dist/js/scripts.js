@@ -282,7 +282,7 @@ $(document).ready(function () {
   }
 });
 
-var tracks = testTracks;
+var tracks = ddTracks;
 
 var trackIndex = 0;
 var audioKicking = false;
