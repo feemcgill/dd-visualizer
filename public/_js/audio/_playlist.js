@@ -1,5 +1,6 @@
 
 
+const debug = false;
 
 const ddTracks = [
   {
@@ -34,10 +35,13 @@ const testTracks = [
 let dbg = null;
 $(document).ready(function(){
   dbg = $('.debug');
-  dbg.text('ios8')
+  dbg.text('ios8');
+  if (debug) {
+    dbg.show();
+  }
 });
 
-const tracks = testTracks;
+const tracks = ddTracks;
 
 let trackIndex = 0;
 let audioKicking = false;
