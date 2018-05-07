@@ -31,6 +31,12 @@ const testTracks = [
   }
 ]
 
+let dbg = null;
+$(document).ready(function(){
+  dbg = $('.debug');
+  dbg.text('ios6')
+});
+
 const tracks = testTracks;
 
 let trackIndex = 0;
@@ -38,7 +44,6 @@ let audioKicking = false;
 let autioInitiated = false;
 let playCount = 0;
 
-alert('ios 5');
 var audioContext = null, usingWebAudio = true;
 
 try {
@@ -53,7 +58,6 @@ try {
     usingWebAudio = false;
 }
 
-alert(usingWebAudio);
 
 
 //const audioContext = new AudioContext();
@@ -75,7 +79,6 @@ let trackBuffer;
 let trackSource;
 
 function nextTrack(){
-  alert('init Next Track');
   audioKicking = false;
   trackIndex = (trackIndex + 1) % tracks.length;
   const audioSrc = './audio/'+tracks[trackIndex].url;
@@ -89,7 +92,7 @@ function nextTrack(){
         tickerText.text =  'NOW PLAYING: ' + tracks[trackIndex].text;
         nowPLayingTicker();
       }, 3500);
-      alert('got the track should play');
+      dbg.text('got the track should play');
       play(trackBuffer);
     });
 }
@@ -108,7 +111,7 @@ function play(audioBuffer) {
     nextTrack();
   }    
   trackSource.start();
-  alert('should start now');
+  dbg.text('should start now');
   audioKicking = true;
   autioInitiated = true;
   if (playCount > 0) {
@@ -153,3 +156,4 @@ $('.mute-toggle').click(function(){
   }
   muted = !muted;
 });
+
