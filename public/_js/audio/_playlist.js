@@ -80,8 +80,15 @@ function nextTrack(){
       return response.arrayBuffer();
     })
     .then(arrayBuffer => {
+      const audioData = audioContext.decodeAudioData(arrayBuffer);
+      console.log(audioData);
       dbg.append('<div>decode audio data</div>');
-      return audioContext.decodeAudioData(arrayBuffer);
+      return audioData;
+    })
+    .catch((exception) => {
+      console.error('oh noes!', exception)
+      dbg.append('<div>EXCEPTION</div>');
+      dbg.append(exception);
     })
     .then(audioBuffer => {
       trackBuffer = audioBuffer;
