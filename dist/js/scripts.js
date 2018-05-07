@@ -323,7 +323,12 @@ function nextTrack() {
     dbg.append(exception);
   }).then(function () {
     //play(trackBuffer);
-    dbg.append('<div>Try playing now</div>');
+    if (audioKicking) {
+      play(trackBuffer);
+    } else {
+      dbg.append('<div>Try playing now</div>');
+      audioKicking = true;
+    }
   });
 }
 
@@ -333,15 +338,14 @@ function play(audioBuffer) {
   }
   trackSource = audioContext.createBufferSource();
   trackSource.buffer = audioBuffer;
-  trackSource.connect(audioContext.destination);
-  //trackSource.connect(analyser);
+  //trackSource.connect(audioContext.destination);
+  trackSource.connect(analyser);
 
   trackSource.onended = function (event) {
     nextTrack();
   };
   trackSource.start();
   dbg.append('should start now');
-  audioKicking = true;
   autioInitiated = true;
   if (playCount > 0) {
     swapTextures();
@@ -351,8 +355,7 @@ function play(audioBuffer) {
   playCount++;
 }
 
-function initAudio() {
-  console.log('init audio');
+function initAudio(callback) {
   try {
     if (typeof AudioContext !== 'undefined') {
       audioContext = new AudioContext();
@@ -365,13 +368,6 @@ function initAudio() {
     usingWebAudio = false;
   }
 
-  analyser = audioContext.createAnalyser();
-  analyser.connect(audioContext.destination);
-  analyser.fftSize = 32;
-  bufferLength = analyser.frequencyBinCount;
-  dataArray = new Uint8Array(bufferLength);
-
-  // context state at this time is `undefined` in iOS8 Safari
   if (usingWebAudio && audioContext.state === 'suspended') {
     var resume = function resume() {
       audioContext.resume();
@@ -382,19 +378,22 @@ function initAudio() {
         }
       }, 0);
     };
-
     document.body.addEventListener('touchend', resume, false);
   }
 
-  nextTrack();
+  analyser = audioContext.createAnalyser();
+  analyser.connect(audioContext.destination);
+  analyser.fftSize = 32;
+  bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+
+  callback();
 }
 
-'';
+initAudio(nextTrack);
 
 var muted = false;
-$('.play-it').click(function () {
-  initAudio();
-});
+$('.play-it').click(function () {});
 $('.play-now').click(function () {
   play(trackBuffer);
 });
