@@ -76,55 +76,26 @@ function nextTrack(){
   const audioSrc = './audio/'+tracks[trackIndex].url;
   trackIndex = (trackIndex + 1) % tracks.length;
 
-  // window.fetch(audioSrc)
-  //   .then(response => {
-  //     //response.arrayBuffer();
-  //     console.log(response);
-  //     dbg.text(response.status);
-  //     return response.arrayBuffer();
-  //   })
-  //   .then(arrayBuffer => {
-  //     const audioData = audioContext.decodeAudioData(arrayBuffer);
-  //     console.log(audioData);
-  //     dbg.append('<div>decode audio data!!</div>');
-  //     return audioData;
-  //   })
-  //   .catch((exception) => {
-  //     console.error('oh noes!', exception)
-  //     dbg.append('<div>EXCEPTION</div>');
-  //     dbg.append(exception);
-  //   })
-  //   .then(audioBuffer => {
-  //     trackBuffer = audioBuffer;
-  //     setTimeout(() => {
-  //       tickerText.text =  'NOW PLAYING: ' + tracks[trackIndex].text;
-  //       nowPLayingTicker();
-  //     }, 3500);
-  //     dbg.append('<div>got the track should play</div>');
-  //     play(trackBuffer);
-  //   });
-
-    
-    window.fetch(audioSrc)
-    .then(response => response.arrayBuffer())
-    .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer, 
-      audioBuffer => {
-        trackBuffer = audioBuffer;
-      }, 
-      error => 
-        console.error(error)
-      )
+  window.fetch(audioSrc)
+  .then(response => response.arrayBuffer())
+  .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer, 
+    audioBuffer => {
+      trackBuffer = audioBuffer;
+    }, 
+    error => 
+      console.error(error)
     )
-    .catch((exception) => {
-      console.error('oh noes!', exception)
-      dbg.append('<div>EXCEPTION</div>');
-      dbg.append(exception);
-    })    
-    .then(function(){
-      //play(trackBuffer);
-      dbg.append('<div>Try playing now</div>');
+  )
+  .catch((exception) => {
+    console.error('oh noes!', exception)
+    dbg.append('<div>EXCEPTION</div>');
+    dbg.append(exception);
+  })    
+  .then(function(){
+    //play(trackBuffer);
+    dbg.append('<div>Try playing now</div>');
 
-    });
+  });
 }
   
 

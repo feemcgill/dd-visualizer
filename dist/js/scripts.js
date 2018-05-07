@@ -77,13 +77,13 @@ document.body.appendChild(app.view);
 // load the texture we need
 PIXI.loader.add('fun', 'img/logo.png').load(function (loader, resources) {
 
-    //vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
-    vidTex = new PIXI.Texture.fromImage('img/rg.jpg');
+    vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    //vidTex = new PIXI.Texture.fromImage('img/rg.jpg');    
     vidTex.baseTexture.source.loop = true;
     vidTex.baseTexture.source.muted = true;
 
-    //vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
-    vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
+    vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    //vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
     vidTex2.baseTexture.source.loop = true;
     vidTex2.baseTexture.source.muted = true;
 
@@ -308,35 +308,6 @@ function nextTrack() {
   audioKicking = false;
   var audioSrc = './audio/' + tracks[trackIndex].url;
   trackIndex = (trackIndex + 1) % tracks.length;
-
-  // window.fetch(audioSrc)
-  //   .then(response => {
-  //     //response.arrayBuffer();
-  //     console.log(response);
-  //     dbg.text(response.status);
-  //     return response.arrayBuffer();
-  //   })
-  //   .then(arrayBuffer => {
-  //     const audioData = audioContext.decodeAudioData(arrayBuffer);
-  //     console.log(audioData);
-  //     dbg.append('<div>decode audio data!!</div>');
-  //     return audioData;
-  //   })
-  //   .catch((exception) => {
-  //     console.error('oh noes!', exception)
-  //     dbg.append('<div>EXCEPTION</div>');
-  //     dbg.append(exception);
-  //   })
-  //   .then(audioBuffer => {
-  //     trackBuffer = audioBuffer;
-  //     setTimeout(() => {
-  //       tickerText.text =  'NOW PLAYING: ' + tracks[trackIndex].text;
-  //       nowPLayingTicker();
-  //     }, 3500);
-  //     dbg.append('<div>got the track should play</div>');
-  //     play(trackBuffer);
-  //   });
-
 
   window.fetch(audioSrc).then(function (response) {
     return response.arrayBuffer();
