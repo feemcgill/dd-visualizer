@@ -54,29 +54,48 @@ function nextTrack() {
   trackIndex = (trackIndex + 1) % tracks.length;
   var audioSrc = './audio/' + tracks[trackIndex].url;
 
+  // window.fetch(audioSrc)
+  //   .then(response => {
+  //     //response.arrayBuffer();
+  //     console.log(response);
+  //     dbg.text(response.status);
+  //     return response.arrayBuffer();
+  //   })
+  //   .then(arrayBuffer => {
+  //     const audioData = audioContext.decodeAudioData(arrayBuffer);
+  //     console.log(audioData);
+  //     dbg.append('<div>decode audio data!!</div>');
+  //     return audioData;
+  //   })
+  //   .catch((exception) => {
+  //     console.error('oh noes!', exception)
+  //     dbg.append('<div>EXCEPTION</div>');
+  //     dbg.append(exception);
+  //   })
+  //   .then(audioBuffer => {
+  //     trackBuffer = audioBuffer;
+  //     setTimeout(() => {
+  //       tickerText.text =  'NOW PLAYING: ' + tracks[trackIndex].text;
+  //       nowPLayingTicker();
+  //     }, 3500);
+  //     dbg.append('<div>got the track should play</div>');
+  //     play(trackBuffer);
+  //   });
+
+
   window.fetch(audioSrc).then(function (response) {
-    //response.arrayBuffer();
-    console.log(response);
-    dbg.text(response.status);
     return response.arrayBuffer();
   }).then(function (arrayBuffer) {
-    var audioData = audioContext.decodeAudioData(arrayBuffer);
-    console.log(audioData);
-    dbg.append('<div>decode audio data</div>');
-    return audioData;
-  }).catch(function (exception) {
-    console.error('oh noes!', exception);
-    dbg.append('<div>EXCEPTION</div>');
-    dbg.append(exception);
-  }).then(function (audioBuffer) {
-    trackBuffer = audioBuffer;
-    setTimeout(function () {
-      tickerText.text = 'NOW PLAYING: ' + tracks[trackIndex].text;
-      nowPLayingTicker();
-    }, 3500);
+    return audioContext.decodeAudioData(arrayBuffer, function (audioBuffer) {
+      trackBuffer = audioBuffer;
+    }, function (error) {
+      return console.error(error);
+    });
+  });
+  setTimeout(function () {
     dbg.append('<div>got the track should play</div>');
     play(trackBuffer);
-  });
+  }, 1000);
 }
 
 function play(audioBuffer) {
