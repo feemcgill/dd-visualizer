@@ -132,8 +132,8 @@ function play(audioBuffer) {
   }
   trackSource = audioContext.createBufferSource();
   trackSource.buffer = audioBuffer;
-  //trackSource.connect(audioContext.destination);
-  trackSource.connect(analyser);
+  trackSource.connect(audioContext.destination);
+  //trackSource.connect(analyser);
 
   trackSource.onended = function(event) {
     nextTrack();
