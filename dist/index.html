@@ -14,7 +14,9 @@
     <style>
       @import url("/count/362127");
       @font-face {font-family: 'SerifGothicStd-Bold';src: url('fonts/362127_0_0.eot');src: url('fonts/362127_0_0.eot?#iefix') format('embedded-opentype'),url('fonts/362127_0_0.woff2') format('woff2'),url('fonts/362127_0_0.woff') format('woff'),url('fonts/362127_0_0.ttf') format('truetype');}
-       
+       body {
+        font-family: 'SerifGothicStd-Bold';         
+       }
       .dd-visualizer-controls {
         position: absolute;
         top: 20px;
@@ -23,17 +25,16 @@
       button {
         background: white;
         color: black;
-        font-family: 'SerifGothicStd-Bold';
         text-transform: uppercase;
         letter-spacing: 0.2em;
         box-shadow: none;
         border: none;
         padding: 5px 10px 2px;
         border-radius: 5px;
-        font-size: 40px;
+        font-family: 'SerifGothicStd-Bold';                 
       }
       .debug {
-        background: black;
+        background: rgba(0,0,0,.2);
         position: absolute;
         padding: 5px;
         color: white;
@@ -41,6 +42,44 @@
         width: 100%;
         display: none;
       }
+      .loading-screen {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-transform: uppercase;
+      }
+      .loading-screen .play-it {
+        display: none;
+        color: white;
+        text-decoration: none;
+        font-size: 40px;
+        letter-spacing: 0.2em;
+      }
+      .loading-screen .play-it span {
+        display: inline-block;
+        vertical-align: middle;
+        padding-top: 9px;
+      }
+      .loading-screen .play-it:after {
+        content: '';
+        border: 20px solid transparent;
+        border-left: 40px solid white;
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+        transition: all .2s ease-out;
+      }
+      .loading-screen .play-it:hover:after {
+        transform: translateX(10px);
+      }
+      
+
       button:focus {outline:0;}
 
     </style>
@@ -48,9 +87,12 @@
   <body>
     <div class="dd-visualizer-controls">
       <button class="mute-toggle">Mute</button>
-      <button class="play-it">Play</button>
-      <button class="play-now">Play NOW THO</button>
-
+    </div>
+    <div class="loading-screen">
+      <div class="in">
+          <div class="loading">Loading...</div>
+          <a href="#" class="play-it"><span>Play</span></a>
+      </div>
     </div>
     <div class="debug">debug</div>
 

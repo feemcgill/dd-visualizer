@@ -1,13 +1,3 @@
-
-
-// The application will create a renderer using WebGL, if possible,
-// with a fallback to a canvas render. It will also setup the ticker
-// and the root stage PIXI.Container
-// function mapRange (value, a, b, c, d) {
-//     value = (value - a) / (b - a);
-//     return c + value * (d - c);
-// }
-
 function mapRange (num, in_min, in_max, out_min, out_max) {
     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
@@ -21,6 +11,8 @@ let snakeSegs;
 let bgVidSprite;
 let vidTex;
 let vidTex2;
+let logo;
+let bigRect;
 
 function nowPLayingTicker(){
     TweenMax.to(tickerText, 30, {x: -2000, ease:Linear.easeNone, onComplete: function(){
@@ -30,6 +22,8 @@ function nowPLayingTicker(){
 }
 
 function snakeIntro(){
+    nowPLayingTicker();
+    TweenMax.to(logo, 5, {alpha: 1});
     for (let i = 0; i < snakeSegs.length; i++) {
         TweenMax.to(snakeSegs[i], 10, {width: app.renderer.width * ((i + 1) / snakeSegs.length), height: app.renderer.height * ((i + 1) / snakeSegs.length), delay: i * 0.7, 
             onComplete: function(){
@@ -37,6 +31,18 @@ function snakeIntro(){
                     snakesReady = true;
                 }
             }
+        })
+    }
+}
+
+function snakeCenter(){
+    for (let i = 0; i < snakeSegs.length; i++) {
+        TweenMax.to(snakeSegs[i], .1, {
+            width: app.renderer.width * ((i + 1) / snakeSegs.length), 
+            height: app.renderer.height * ((i + 1) / snakeSegs.length),
+            x: app.renderer.width / 2,
+            y: app.renderer.height / 2,
+            delay: i * 0.1,
         })
     }
 }
@@ -63,11 +69,8 @@ const app = new PIXI.Application({
     backgroundColor : 0xFFFFFF
 });
 
-// The application will create a canvas element for you that you
-// can then insert into the DOM
 document.body.appendChild(app.view);
 
-// load the texture we need
 PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
 
@@ -82,13 +85,12 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
     vidTex2.baseTexture.source.muted = true;
 
 
-    const bigRect = new PIXI.Graphics();
+    bigRect = new PIXI.Graphics();
     bigRect.beginFill(0xffffff, 1);
     bigRect.drawRect(0, 0, window.innerWidth, window.innerHeight);
     bigRect.endFill();
-    bigRect.aplha = .4;
+    bigRect.alpha = 0.0;
     bigRect.interactive = true;
-    app.stage.addChild(bigRect);
 
     let ww = app.renderer.width;
     let wh = app.renderer.height;
@@ -103,9 +105,9 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
             TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(e.data.global.x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(e.data.global.y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);            
         }
 
-        const logoX = mapRange(e.data.global.x, 0, app.renderer.width, wwH+logoOffset, wwH-logoOffset);
-        const logoY = mapRange(e.data.global.y, 0, app.renderer.height, whH+logoOffset, whH-logoOffset);
-        TweenMax.to(logo, 2, {x:logoX, y:logoY});
+        // const logoX = mapRange(e.data.global.x, 0, app.renderer.width, wwH+logoOffset, wwH-logoOffset);
+        // const logoY = mapRange(e.data.global.y, 0, app.renderer.height, whH+logoOffset, whH-logoOffset);
+        // TweenMax.to(logo, 2, {x:logoX, y:logoY});
     });
 
 
@@ -172,13 +174,14 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
      snakeSegsReverse = snakeSegs.reverse();
 
 
-    const logo = new PIXI.Sprite(resources.fun.texture);
+    logo = new PIXI.Sprite(resources.fun.texture);
     logo.x = app.renderer.width / 2;
     logo.y = app.renderer.height / 2;
     logo.scale.x = 0;
     logo.scale.y = 0;
     logo.anchor.x = 0.5;
     logo.anchor.y = 0.5;
+    logo.alpha = 0;
     app.stage.addChild(logo);
 
 
@@ -200,37 +203,38 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
 
 
-    const analJamCont = new PIXI.Sprite();
-    app.stage.addChild(analJamCont);
-    // analJamCont.anchor.x = 0.5;
-    // analJamCont.anchor.y = 0.5;
-    analJamCont.x = 100;
-    analJamCont.y = 100;
-    const analShapes = [];
-    for (let i = 0; i < 4; i++) {
-        for (let j = 0; j < 4; j++) {
-            const fun = new PIXI.Sprite();
-            fun.width = 40;
-            fun.height = 40;
-            const funmask = new PIXI.Graphics();
-            funmask.beginFill(0xffffff);
-            funmask.drawCircle(0,0,1);
-            funmask.endFill();
-            // Setup the position of the fun
-            fun.x = 100 * i;
-            fun.y = 100 * j;
-            fun.x = ww * i / 4;
-            fun.y = wh * j / 4;
-            fun.alpha = 0.7;        
-            analShapes.push(fun);
-            fun.addChild(funmask);
-            //fun.mask = funmask;
-            //analJamCont.addChild(fun);            
+    // const analJamCont = new PIXI.Sprite();
+    // app.stage.addChild(analJamCont);
+    // // analJamCont.anchor.x = 0.5;
+    // // analJamCont.anchor.y = 0.5;
+    // analJamCont.x = 100;
+    // analJamCont.y = 100;
+    // const analShapes = [];
+    // for (let i = 0; i < 4; i++) {
+    //     for (let j = 0; j < 4; j++) {
+    //         const fun = new PIXI.Sprite();
+    //         fun.width = 40;
+    //         fun.height = 40;
+    //         const funmask = new PIXI.Graphics();
+    //         funmask.beginFill(0xffffff);
+    //         funmask.drawCircle(0,0,1);
+    //         funmask.endFill();
+    //         // Setup the position of the fun
+    //         fun.x = 100 * i;
+    //         fun.y = 100 * j;
+    //         fun.x = ww * i / 4;
+    //         fun.y = wh * j / 4;
+    //         fun.alpha = 0.7;        
+    //         analShapes.push(fun);
+    //         fun.addChild(funmask);
+    //         //fun.mask = funmask;
+    //         //analJamCont.addChild(fun);            
             
-        }        
-    }
+    //     }        
+    // }
 
 
+    app.stage.addChild(bigRect);
 
 
     app.ticker.add(() => {
@@ -249,11 +253,11 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
             analyser.getByteFrequencyData(dataArray);            
             logo.scale.x = r;
             logo.scale.y = r;
-            for (let i = 0; i < analShapes.length; i++) {
-                const e = analShapes[i];
-                e.scale.x = dataArray[i];
-                e.scale.y = dataArray[i];                
-            }
+            // for (let i = 0; i < analShapes.length; i++) {
+            //     const e = analShapes[i];
+            //     e.scale.x = dataArray[i];
+            //     e.scale.y = dataArray[i];                
+            // }
  
         }
     });
@@ -262,3 +266,89 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 // var texture = PIXI.Texture.fromCanvas(canvas);
 // var spriteMask = new PIXI.Texture(texture);
 // mySprite.mask = spriteMask;
+
+
+function getWindowSize(){
+	const wWidth = window.innerWidth;
+    const wHeight = window.innerHeight;
+    const data = {
+        width: wWidth,
+        height: wHeight
+    };
+    return data;
+}
+
+function sizeIt() {
+	const size = getWindowSize();
+	
+	const w = size.width;
+	const h = size.height;
+
+	app.renderer.view.style.width = w + "px";    
+	app.renderer.view.style.height = h + "px";      
+	app.renderer.resize(w,h);
+
+    bigRect.width = w;
+    bigRect.height = h;
+    bgVidSprite.width = w;
+    bgVidSprite.height = h;
+    videoSprite.width = w;
+    videoSprite.height = h;
+
+    logo.x = w / 2;
+    logo.y = h / 2;
+
+    tickerText.y = h - 50;
+    
+    snakeCenter();
+	// gameContainer.x = ((renderer.width - cWidth)/2);
+	// gameContainer.y = (renderer.height - cHeight)/2;
+
+	// if (rewardOnScreen) {		
+	// 	spiralContainer.x = (renderer.width/2);
+	// 	spiralContainer.y = (renderer.height/2);
+	// 	swampFrameSize();
+	// 	mirrorJamSize();
+	// 	coverJamSize();
+	// }
+
+	// if (waterOnScreen) {
+	// 	waterSprite.height = renderer.height;
+	// 	waterSprite.width = renderer.width;
+	// 	waterSprite.x = renderer.width/2;
+	// 	waterSprite.y = renderer.height/2;			
+	// }	
+}
+
+//sizeIt();
+
+(function($,sr){
+
+  var debounce = function (func, threshold, execAsap) {
+      var timeout;
+
+      return function debounced () {
+          var obj = this, args = arguments;
+          function delayed () {
+              if (!execAsap)
+                  func.apply(obj, args);
+              timeout = null; 
+          };
+
+          if (timeout)
+              clearTimeout(timeout);
+          else if (execAsap)
+              func.apply(obj, args);
+
+          timeout = setTimeout(delayed, threshold || 50); 
+      };
+  }
+    // smartresize 
+    jQuery.fn[sr] = function(fn){  return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
+
+})(jQuery,'smartresize');
+
+
+jQuery(window).smartresize(function(){  
+	sizeIt();
+}); 

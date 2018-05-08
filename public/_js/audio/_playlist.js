@@ -1,21 +1,115 @@
 
 
-const debug = true;
+const debug = false;
 
 const ddTracks = [
   {
-    'url': 'White-Fence_To-the-Boy-I-Jumped-in-the-Hemlock-Alley.mp3',
-    'text' : 'To the Boy I Jumped in the Hemlock Alley by White Fence'
+    'text' : 'A Place To Bury Strangers - Never Coming Back',
+    'url' : 'A+Place+To+Bury+Strangers+-+Never+Coming+Back.mp3'
   },
   {
-    'url': 'Tame-Impala_Yes-Im-Changing.mp3',
-    'text' : 'Yes I\'m Changing by Tame Impala'
-    
+    'text' : 'All Them Witches - Alabaster',
+    'url' : 'All+Them+Witches+-+Alabaster.mp3'
   },
   {
-    'url': 'Mercury-Rev_Opus-40.mp3',
-    'text' : 'Opus 40 by Mercury Rev'
-    
+    'text' : 'CHELSEA WOLFE - Offering',
+    'url' : 'CHELSEA+WOLFE+-+Offering.mp3'
+  },
+  {
+    'text' : 'Can -  Little Star of Bethlehem',
+    'url' : 'Can+-++Little+Star+of+Bethlehem.mp3'
+  },
+  {
+    'text' : 'Connan Mockasin - It_s Choade My Dear',
+    'url' : 'Connan+Mockasin+-+It_s+Choade+My+Dear.mp3'
+  },
+  {
+    'text' : 'Cut Worms - Cash for Gold',
+    'url' : 'Cut+Worms+-+Cash+for+Gold.mp3'
+  },
+  {
+    'text' : 'DakhaBrakha - Kolyskova',
+    'url' : 'DakhaBrakha+-+Kolyskova.mp3'
+  },
+  {
+    'text' : 'Death Grips - Eh',
+    'url' : 'Death+Grips+-+Eh.mp3'
+  },
+  {
+    'text' : 'Ex-Cult - New Face On',
+    'url' : 'Ex-Cult+-+New+Face+On.mp3'
+  },
+  {
+    'text' : 'Gladys Lazer - SW Georgia',
+    'url' : 'Gladys+Lazer+-+SW+Georgia.mp3'
+  },
+  {
+    'text' : 'Here Lies Man - I stand Alone',
+    'url' : 'Here+Lies+Man+-+I+stand+Alone.mp3'
+  },
+  {
+    'text' : 'Kevin Morby - Tin Can',
+    'url' : 'Kevin+Morby+-+Tin+Can.mp3'
+  },
+  {
+    'text' : 'Kikagaku Moyo - Green Sugar',
+    'url' : 'Kikagaku+Moyo+-+Green+Sugar.mp3'
+  },
+  {
+    'text' : 'King Khan _ The Shrines - I Wanna Be a Girl',
+    'url' : 'King+Khan+_+The+Shrines+-+I+Wanna+Be+a+Girl.mp3'
+  },
+  {
+    'text' : 'Mary Lattimore - Hello From the Edge of the Earth',
+    'url' : 'Mary+Lattimore+-+Hello+From+the+Edge+of+the+Earth.mp3'
+  },
+  {
+    'text' : 'Mercury Rev - Opus 40',
+    'url' : 'Mercury+Rev+-+Opus+40.mp3'
+  },
+  {
+    'text' : 'Pond - Paint Me Silver',
+    'url' : 'Pond+-+Paint+Me+Silver.mp3'
+  },
+  {
+    'text' : 'Preoccupations - Zodiac',
+    'url' : 'Preoccupations+-+Zodiac.mp3'
+  },
+  {
+    'text' : 'Sextile - Ripped',
+    'url' : 'Sextile+-+Ripped.mp3'
+  },
+  {
+    'text' : 'Shannon _ The Clams - I Leave Again',
+    'url' : 'Shannon+_+The+Clams+-+I+Leave+Again.mp3'
+  },
+  {
+    'text' : 'The Holydrug Couple - If I Could Find You (Eternity)',
+    'url' : 'The+Holydrug+Couple+-+If+I+Could+Find+You+(Eternity).mp3'
+  },
+  {
+    'text' : 'Tropa Magica - LSD Roma',
+    'url' : 'Tropa+Magica+-+LSD+Roma.mp3'
+  },
+  {
+    'text' : 'True Widow - Skull Eyes',
+    'url' : 'True+Widow+-+Skull+Eyes.mp3'
+  },
+  {
+    'text' : 'Ty Segall -  Every 1_s a Winner',
+    'url' : 'Ty+Segall+-++Every+1_s+a+Winner.mp3'
+  },
+  {
+    'text' : 'Ulrika Spacek - Ornament',
+    'url' : 'Ulrika+Spacek+-+Ornament.mp3'
+  },
+  {
+    'text' : 'Warpaint - Above Control',
+    'url' : 'Warpaint+-+Above+Control.mp3'
+  },
+  {
+    'text' : 'White Fence - To the Boy I Jumped in the Hemlock Alley',
+    'url' : 'White+Fence+-+To+the+Boy+I+Jumped+in+the+Hemlock+Alley.mp3'
   }
 ]
 
@@ -47,34 +141,18 @@ let trackIndex = 0;
 let audioKicking = false;
 let autioInitiated = false;
 let playCount = 0;
-
-var audioContext = null, usingWebAudio = true;
-
-
-
-
-
-//const audioContext = new AudioContext();
-
-
+let audioContext = null;
+let usingWebAudio = true;
 let analyser = null;
 let bufferLength = null;
 let dataArray = null;
-
-
-
-
-
-
 let viZdata;
-
 let trackBuffer;
 let trackSource;
 
 function nextTrack(){
   audioKicking = false;
-  const audioSrc = './audio/'+tracks[trackIndex].url;
-  trackIndex = (trackIndex + 1) % tracks.length;
+  const audioSrc = 'https://cors.now.sh/https://s3-us-west-2.amazonaws.com/ddaze-visualizer/dd18mix/'+tracks[trackIndex].url;
 
   window.fetch(audioSrc)
   .then(response => response.arrayBuffer())
@@ -92,39 +170,47 @@ function nextTrack(){
     dbg.append(exception);
   })    
   .then(function(){
-    //play(trackBuffer);
-    if (audioKicking) {
-      //play(trackBuffer);
-    } else {
-      dbg.append('<div>Try playing now</div>');
+    if (!audioKicking) {
       audioKicking = true;
-    }
-
+      $('.loading').hide();
+      $('.play-it').show();
+    };
+    dbg.append('<div>Next Track Loaded</div>');
+    trackIndex = (trackIndex + 1) % tracks.length;  
   });
-}
-  
 
+}
+
+function updateTicker(text){
+  tickerText.text =  'NOW PLAYING: ' + text;  
+}
+
+let playingIndex = 0
 function play(audioBuffer) {
   if (autioInitiated) {
     trackSource.buffer = null;
   }
   trackSource = audioContext.createBufferSource();
   trackSource.buffer = audioBuffer;
-  //trackSource.connect(audioContext.destination);
   trackSource.connect(analyser);
-
   trackSource.onended = function(event) {
+    // Play the next track once this one has ended.. Assumes trackBuffer has been updated to the next track via nextTrack();
+    // TODO: test to see if the next track is indeed ready to play.
     play(trackBuffer);
-    // play here
   }    
   trackSource.start();
-  dbg.append('should start now');
+  dbg.append('<div>Playing New Track</div>');
   autioInitiated = true;
+  
+  // Visual stuff
   if (playCount > 0) {
     swapTextures();
   } else {
     snakeIntro();    
   }
+  updateTicker(tracks[playingIndex].text);
+
+  playingIndex = (playingIndex + 1) % tracks.length;  
   playCount++;
   nextTrack();
 }
@@ -143,7 +229,6 @@ function initAudio(callback){
   } catch(e) {
       usingWebAudio = false;
   }
-
   if (usingWebAudio && audioContext.state === 'suspended') {
     var resume = function () {
       audioContext.resume();
@@ -156,13 +241,11 @@ function initAudio(callback){
     };
     document.body.addEventListener('touchend', resume, false);
   }
-
   analyser = audioContext.createAnalyser();
   analyser.connect(audioContext.destination);
   analyser.fftSize = 32;
   bufferLength = analyser.frequencyBinCount; 
   dataArray = new Uint8Array(bufferLength);
-
   callback();
 }
 
@@ -171,12 +254,14 @@ initAudio(nextTrack);
 
 
 let muted = false;
-$('.play-it').click(function(){
-  
+$('.play-it').click(function(e){
+  e.preventDefault();
+  play(trackBuffer);
+  if (!debug) {
+    $('.loading-screen').remove();    
+  }
 });
-$('.play-now').click(function(){
-  play(trackBuffer); 
-});
+
 $('.mute-toggle').click(function(){
   if (muted) {
     trackSource.connect(analyser);
