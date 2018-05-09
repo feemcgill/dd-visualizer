@@ -22,7 +22,7 @@ const debug = true;
 
 $(document).ready(function(){
   dbg = $('.debug');
-  dbg.text('debug');
+  dbg.text('debugg');
   if (debug) {
     dbg.show();
   }
@@ -270,6 +270,7 @@ $('.play-it').click(function(e){
   e.preventDefault();
   play(trackBuffer);
   if (!debug) {
+    dbg.append(usingWebAudio, audioContext.state);
     $('.loading-screen').remove();    
   }
 });
