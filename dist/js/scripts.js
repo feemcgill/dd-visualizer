@@ -280,8 +280,8 @@ function sizeIt() {
     app.renderer.view.style.height = h + "px";
     app.renderer.resize(w, h);
 
-    bigRect.width = w;
-    bigRect.height = h;
+    // bigRect.width = w;
+    // bigRect.height = h;
     bgVidSprite.width = w;
     bgVidSprite.height = h;
     videoSprite.width = w;
@@ -533,18 +533,6 @@ function initAudio(callback) {
   } catch (e) {
     usingWebAudio = false;
   }
-  if (usingWebAudio && audioContext.state === 'suspended') {
-    var resume = function resume() {
-      audioContext.resume();
-
-      setTimeout(function () {
-        if (audioContext.state === 'running') {
-          document.body.removeEventListener('touchend', resume, false);
-        }
-      }, 0);
-    };
-    document.body.addEventListener('touchend', resume, false);
-  }
   analyser = audioContext.createAnalyser();
   analyser.connect(audioContext.destination);
   analyser.fftSize = 32;
@@ -557,6 +545,9 @@ initAudio(nextTrack);
 
 var muted = false;
 $('.play-it').click(function (e) {
+  if (usingWebAudio && audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
   e.preventDefault();
   play(trackBuffer);
   if (!debug) {

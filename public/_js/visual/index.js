@@ -288,8 +288,8 @@ function sizeIt() {
 	app.renderer.view.style.height = h + "px";      
 	app.renderer.resize(w,h);
 
-    bigRect.width = w;
-    bigRect.height = h;
+    // bigRect.width = w;
+    // bigRect.height = h;
     bgVidSprite.width = w;
     bgVidSprite.height = h;
     videoSprite.width = w;

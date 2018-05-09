@@ -229,18 +229,6 @@ function initAudio(callback){
   } catch(e) {
       usingWebAudio = false;
   }
-  if (usingWebAudio && audioContext.state === 'suspended') {
-    var resume = function () {
-      audioContext.resume();
-
-      setTimeout(function () {
-        if (audioContext.state === 'running') {
-          document.body.removeEventListener('touchend', resume, false);
-        }
-      }, 0);
-    };
-    document.body.addEventListener('touchend', resume, false);
-  }
   analyser = audioContext.createAnalyser();
   analyser.connect(audioContext.destination);
   analyser.fftSize = 32;
@@ -255,6 +243,9 @@ initAudio(nextTrack);
 
 let muted = false;
 $('.play-it').click(function(e){
+  if (usingWebAudio && audioContext.state === 'suspended') {
+    audioContext.resume();
+  }  
   e.preventDefault();
   play(trackBuffer);
   if (!debug) {
