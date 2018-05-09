@@ -1,6 +1,32 @@
 
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
 
-const debug = false;
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+
+const debug = true;
+
+$(document).ready(function(){
+  dbg = $('.debug');
+  dbg.text('debug');
+  if (debug) {
+    dbg.show();
+  }
+});
 
 const ddTracks = [
   {
@@ -127,16 +153,11 @@ const testTracks = [
 ]
 
 let dbg = null;
-$(document).ready(function(){
-  dbg = $('.debug');
-  dbg.text('ios9');
-  if (debug) {
-    dbg.show();
-  }
-});
 
-const tracks = ddTracks;
 
+
+const tracks = shuffle(ddTracks);
+console.log(tracks);
 let trackIndex = 0;
 let audioKicking = false;
 let autioInitiated = false;
@@ -152,7 +173,7 @@ let trackSource;
 
 function nextTrack(){
   audioKicking = false;
-  const audioSrc = 'https://cors.now.sh/https://s3-us-west-2.amazonaws.com/ddaze-visualizer/dd18mix/'+tracks[trackIndex].url;
+  const audioSrc = '//s3-us-west-2.amazonaws.com/ddaze-visualizer/dd18mix/'+tracks[trackIndex].url;
 
   window.fetch(audioSrc)
   .then(response => response.arrayBuffer())
