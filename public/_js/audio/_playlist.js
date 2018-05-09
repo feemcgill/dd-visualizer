@@ -18,7 +18,7 @@ function shuffle(array) {
   return array;
 }
 
-const debug = true;
+const debug = false;
 
 $(document).ready(function(){
   dbg = $('.debug');
