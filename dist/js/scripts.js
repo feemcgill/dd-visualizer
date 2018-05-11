@@ -4,7 +4,6 @@ function shuffle(array) {
   var currentIndex = array.length,
       temporaryValue,
       randomIndex;
-
   // While there remain elements to shuffle...
   while (0 !== currentIndex) {
 
@@ -17,7 +16,6 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
-
   return array;
 }
 
@@ -125,7 +123,6 @@ var testTracks = [{
 var dbg = null;
 
 var tracks = shuffle(ddTracks);
-console.log(tracks);
 var trackIndex = 0;
 var audioKicking = false;
 var autioInitiated = false;

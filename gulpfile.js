@@ -12,15 +12,7 @@ var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var jswrap = require('gulp-js-wrapper');
 var autoprefixer = require('gulp-autoprefixer');
-
-
-// LINT JS
-gulp.task('lint', function() {
-    return gulp.src('public/_js/*.js')
-        .pipe(jshint())
-        .pipe(plumber())
-        .pipe(jshint.reporter('default'))       
-});
+var sourcemaps = require('gulp-sourcemaps');
 
 
 // COMPILE SASS
@@ -54,17 +46,14 @@ gulp.task('scripts', function() {
           this.emit('end')
         })           
         
-        // .pipe(jswrap({
-        //     // pass a safe undefined into the encapsulation
-        //     opener: '$(document).ready(function() {',
-        //     closer: '});'
-        // }))
-
+  
         .pipe(gulp.dest('dist/js'))
         .pipe(rename('scripts.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('dist/js'))
 });
+
+
 
 
 // WATCH FILES FOR CHANGES
