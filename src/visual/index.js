@@ -1,12 +1,15 @@
 import appState from './../state.js';
-import {analyser, dataArray} from './../audio';
+import {analyser, dataArray} from './../audio/audioInit.js';
 
 function mapRange (num, in_min, in_max, out_min, out_max) {
     return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 let count = 0;
-let tickerText = '';
+let tickerText = null;
 let snakeSegsReverse;
 let snakesReady = false;
 let videoSprite;
@@ -16,6 +19,8 @@ let vidTex;
 let vidTex2;
 let logo;
 let bigRect;
+let mouseTimeout = null;
+let mouseInterval = null;
 
 function nowPLayingTicker(){
     TweenMax.to(tickerText, 30, {x: -2000, ease:Linear.easeNone, onComplete: function(){
@@ -32,6 +37,7 @@ const snakeIntro = function(){
             onComplete: function(){
                 if (i+1 == snakeSegs.length) {
                     snakesReady = true;
+                    mouseTimeout = setTimeout(setMouseInterval, 20000);
                 }
             }
         })
@@ -65,6 +71,9 @@ const swapTextures = function() {
     }        
 };
 
+const updateTicker = function(text){
+    tickerText.text =  'NOW PLAYING: ' + text;            
+}
 
 const app = new PIXI.Application({
     width: window.innerWidth,
@@ -101,17 +110,31 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
     let whH = wh/2;
     let tunnelOffset = 170;
     let logoOffset = 10;
+
+
     bigRect.on('mousemove', function (event) {
         const e = event;
-        //TweenMax.to(thing, 2, { x: e.data.global.x, y: e.data.global.y });
         if (snakesReady) {
+            if (mouseTimeout) {
+                clearInterval(mouseInterval);
+                clearTimeout(mouseTimeout);           
+            }            
             TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(e.data.global.x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(e.data.global.y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);            
+            mouseTimeout = setTimeout(setMouseInterval, 10000);
         }
-
-        // const logoX = mapRange(e.data.global.x, 0, app.renderer.width, wwH+logoOffset, wwH-logoOffset);
-        // const logoY = mapRange(e.data.global.y, 0, app.renderer.height, whH+logoOffset, whH-logoOffset);
-        // TweenMax.to(logo, 2, {x:logoX, y:logoY});
     });
+
+    function setMouseInterval() {
+        mouseInterval = setInterval(autoAnimate, 7000);        
+    }
+    function autoAnimate(){
+        console.log('auto animate');
+        const x = getRandomInt(0, app.screen.width);
+        const y = getRandomInt(0, app.screen.height);
+        if (snakesReady) {
+            TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);  
+        }
+    }
 
 
 
@@ -206,69 +229,25 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
 
 
-    // const analJamCont = new PIXI.Sprite();
-    // app.stage.addChild(analJamCont);
-    // // analJamCont.anchor.x = 0.5;
-    // // analJamCont.anchor.y = 0.5;
-    // analJamCont.x = 100;
-    // analJamCont.y = 100;
-    // const analShapes = [];
-    // for (let i = 0; i < 4; i++) {
-    //     for (let j = 0; j < 4; j++) {
-    //         const fun = new PIXI.Sprite();
-    //         fun.width = 40;
-    //         fun.height = 40;
-    //         const funmask = new PIXI.Graphics();
-    //         funmask.beginFill(0xffffff);
-    //         funmask.drawCircle(0,0,1);
-    //         funmask.endFill();
-    //         // Setup the position of the fun
-    //         fun.x = 100 * i;
-    //         fun.y = 100 * j;
-    //         fun.x = ww * i / 4;
-    //         fun.y = wh * j / 4;
-    //         fun.alpha = 0.7;        
-    //         analShapes.push(fun);
-    //         fun.addChild(funmask);
-    //         //fun.mask = funmask;
-    //         //analJamCont.addChild(fun);            
-            
-    //     }        
-    // }
-
-
     app.stage.addChild(bigRect);
 
 
     app.ticker.add(() => {
         count += 0.01;
-        // thing.clear();
-        // thing.beginFill(0x8bc5ff, 0.4);
-        //thing.drawCircle(0 + Math.cos(count)* 20, 0 + Math.sin(count)* 20, 440 + Math.sin(count)* 400);
-        //thing.drawCircle(200, 200, 200);
-       
 
         if (appState.audioKicking) {
-            //thing.drawCircle(100, 100, dataArray[10]);
 
             let r = mapRange(dataArray[10], 0, 255, 0.1, 0.3);
 
             analyser.getByteFrequencyData(dataArray);            
             logo.scale.x = r;
             logo.scale.y = r;
-            // for (let i = 0; i < analShapes.length; i++) {
-            //     const e = analShapes[i];
-            //     e.scale.x = dataArray[i];
-            //     e.scale.y = dataArray[i];                
-            // }
+
  
         }
     });
 });
-// var canvas = document.createElement('canvas');
-// var texture = PIXI.Texture.fromCanvas(canvas);
-// var spriteMask = new PIXI.Texture(texture);
-// mySprite.mask = spriteMask;
+
 
 
 function getWindowSize(){
@@ -357,4 +336,4 @@ jQuery(window).smartresize(function(){
 }); 
 
 
-export {snakeIntro, swapTextures};
+export {snakeIntro, swapTextures, updateTicker};
