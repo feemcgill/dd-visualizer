@@ -1,12 +1,9 @@
 import appState from './../state.js';
 import {analyser, dataArray} from './../audio/audioInit.js';
+import mapRange from './../util/mapRange.js';
+import randomInt from './../util/randomInt.js';
 
-function mapRange (num, in_min, in_max, out_min, out_max) {
-    return (num - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+
 
 let count = 0;
 let tickerText = null;
@@ -21,6 +18,23 @@ let logo;
 let bigRect;
 let mouseTimeout = null;
 let mouseInterval = null;
+let wwH;
+let whH;
+let tunnelOffset = 170;
+let logoOffset = 10;
+
+function autoAnimate(){
+    console.log('auto animate');
+    const x = randomInt(0, app.screen.width);
+    const y = randomInt(0, app.screen.height);
+    if (snakesReady) {
+        TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);  
+    }
+}
+
+function setMouseInterval() {
+    mouseInterval = setInterval(autoAnimate, 10000);        
+}
 
 function nowPLayingTicker(){
     TweenMax.to(tickerText, 30, {x: -2000, ease:Linear.easeNone, onComplete: function(){
@@ -37,7 +51,7 @@ const snakeIntro = function(){
             onComplete: function(){
                 if (i+1 == snakeSegs.length) {
                     snakesReady = true;
-                    mouseTimeout = setTimeout(setMouseInterval, 20000);
+                    mouseTimeout = setTimeout(setMouseInterval, 2000);
                 }
             }
         })
@@ -106,10 +120,9 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
 
     let ww = app.renderer.width;
     let wh = app.renderer.height;
-    let wwH = ww/2;
-    let whH = wh/2;
-    let tunnelOffset = 170;
-    let logoOffset = 10;
+    wwH = ww/2;
+    whH = wh/2;
+
 
 
     bigRect.on('mousemove', function (event) {
@@ -120,21 +133,11 @@ PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
                 clearTimeout(mouseTimeout);           
             }            
             TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(e.data.global.x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(e.data.global.y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);            
-            mouseTimeout = setTimeout(setMouseInterval, 10000);
+            mouseTimeout = setTimeout(setMouseInterval, 1000);
         }
     });
 
-    function setMouseInterval() {
-        mouseInterval = setInterval(autoAnimate, 7000);        
-    }
-    function autoAnimate(){
-        console.log('auto animate');
-        const x = getRandomInt(0, app.screen.width);
-        const y = getRandomInt(0, app.screen.height);
-        if (snakesReady) {
-            TweenMax.staggerTo(snakeSegsReverse, 10, { x: mapRange(x, 0, app.renderer.width, wwH-tunnelOffset, wwH+tunnelOffset), y: mapRange(y, 0, app.renderer.height, whH-tunnelOffset, whH+tunnelOffset) }, .15);  
-        }
-    }
+
 
 
 
