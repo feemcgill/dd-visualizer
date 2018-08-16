@@ -24,7 +24,6 @@ let tunnelOffset = 170;
 let logoOffset = 10;
 
 function autoAnimate(){
-    console.log('auto animate');
     const x = randomInt(0, app.screen.width);
     const y = randomInt(0, app.screen.height);
     if (snakesReady) {

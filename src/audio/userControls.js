@@ -11,6 +11,9 @@ export default function(){
     }  
     e.preventDefault();
     playTrack(appState.nextTrack);
+    TweenMax.to($('.credits'), 1, {opacity: 0, delay: 5, onComplete: function(){
+      $('.credits').remove();
+    }});
     if (!debug) {
       $('.loading-screen').remove();    
     }
