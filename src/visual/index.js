@@ -22,7 +22,6 @@ let wwH;
 let whH;
 let tunnelOffset = 170;
 let logoOffset = 10;
-
 function autoAnimate(){
     const x = randomInt(0, app.screen.width);
     const y = randomInt(0, app.screen.height);
@@ -71,13 +70,13 @@ function snakeCenter(){
 
 
 const swapTextures = function() {
-    videoSprite.setTexture(videoSprite.texture == vidTex ? vidTex2 : vidTex);
+    videoSprite.texture = (videoSprite.texture == vidTex) ? vidTex2 : vidTex;
     for (let i = 0; i < snakeSegs.length; i++) {
         setTimeout(() => {
-            snakeSegs[i].setTexture(snakeSegs[i].texture == vidTex ? vidTex2 : vidTex);
+            snakeSegs[i].texture = (snakeSegs[i].texture == vidTex) ? vidTex2 : vidTex;
             if (i+1 == snakeSegs.length) {
                 setTimeout(() => {
-                    bgVidSprite.setTexture(bgVidSprite.texture == vidTex ? vidTex2 : vidTex);
+                    bgVidSprite.texture = (bgVidSprite.texture == vidTex) ? vidTex2 : vidTex;
                 }, 100);
             }
         }, 100 * i);
@@ -96,19 +95,18 @@ const app = new PIXI.Application({
 
 document.body.appendChild(app.view);
 
-PIXI.loader.add('fun', 'img/logo.png').load((loader, resources) => {
+PIXI.Loader.shared.add('fun', 'img/logo.png').load((loader, resources) => {
 
 
-    vidTex = new PIXI.Texture.fromVideo('vid/vid1-w.mp4');
+    vidTex = new  PIXI.Texture.from('vid/vid1-w.mp4');
     //vidTex = new PIXI.Texture.fromImage('img/rg.jpg');    
-    vidTex.baseTexture.source.loop = true;
-    vidTex.baseTexture.source.muted = true;
+    vidTex.baseTexture.resource.source.loop = true;
+    vidTex.baseTexture.resource.source.muted = true;
 
-    vidTex2 = new PIXI.Texture.fromVideo('vid/froth-2.mp4');
+    vidTex2 = new  PIXI.Texture.from('vid/froth-2.mp4');
     //vidTex2 = new PIXI.Texture.fromImage('img/rg.jpg');
-    vidTex2.baseTexture.source.loop = true;
-    vidTex2.baseTexture.source.muted = true;
-
+    vidTex2.baseTexture.resource.source.loop = true;
+    vidTex2.baseTexture.resource.source.muted = true;
 
     bigRect = new PIXI.Graphics();
     bigRect.beginFill(0xffffff, 1);
